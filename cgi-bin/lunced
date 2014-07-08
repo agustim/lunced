@@ -1,0 +1,31 @@
+#!/bin/sh
+
+cmd=$(echo "$QUERY_STRING" | grep -oE "(^|[?&])cmd=[^&]+" | cut -f 2 -d "=" | head -n1)
+#node=$(echo "$QUERY_STRING" | grep -oE "(^|[?&])node=[^&]+" | cut -f 2 -d "=" | head -n1)
+
+head_txt() {
+	echo "Content-type: text/html"
+	echo ""
+}
+
+head_json() {
+	echo "Content-Type: application/json"
+	echo ""	
+}
+
+head_error() {
+	local error = $1
+
+	[ -z "$error" ] && error="404"
+
+	echo "Status: $error Not Found"
+	echo "Content-Type: text/html"
+	echo ""
+	echo "<h1>$error File not found!</h1>"
+	exit
+}
+
+[ -z "$cmd" ] && head_error
+
+head_json
+ubus call lunced $cmd

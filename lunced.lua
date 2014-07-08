@@ -15,42 +15,32 @@ if not conn then
 end
 
 local lunced_method = {
-	broken = {
-		nodes = 1,
-		neighbours = {
-			function(req)
-			end, {id = "fail" }
-		},
-	},
 	lunced = {
 		listnodes = {
 			function(req, msg)
 				-- get nodes
 				conn:reply(req, lunced_bmx6_nodes());
 				print("Call to function 'nodes'")
-				for k, v in pairs(msg) do
-					print("key=" .. k .. " value=" .. tostring(v))
-				end
-			end, {id = ubus.INT32, msg = ubus.STRING }
+			end, { nodes = ubus.STRING }
 		},
 		neighbours = {
 			function(req)
 				conn:reply(req, lunced_bmx6_neighbours());
 				print("Call to function 'neighbours'")
-			end, {id = ubus.INT32, msg = ubus.STRING }
+			end, { nodes = ubus.STRING }
 		},
 		self = {
 			function(req)
 				conn:reply(req, lunced_bmx6_local());
 				print("Call to function 'self'")
-			end, {id = ubus.INT32, msg = ubus.STRING }
+			end, {id = ubus.STRING, name = ubus.STRING }
 		},
 		version = {
 			function(req)
 
 				conn:reply(req, lunced_local_version() );
 				print("Call to function 'version'")
-			end, {id = ubus.INT32, msg = ubus.STRING }
+			end, { version = ubus.STRING }
 		},
 		reply = {
 			function(req, msg)
@@ -58,7 +48,7 @@ local lunced_method = {
 				for k, v in pairs(msg) do
 					print("key=" .. k .. " value=" .. tostring(v))
 				end
-			end, {id = ubus.INT32, msg = ubus.STRING }
+			end, { cmd = ubus.STRING }
 		}
 
 	}
