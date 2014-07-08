@@ -22,10 +22,10 @@ local lunced_method = {
 			end, {id = "fail" }
 		},
 	},
-	lucend = {
+	lunced = {
 		listnodes = {
 			function(req, msg)
-				-- get nodes 
+				-- get nodes
 				conn:reply(req, lunced_bmx6_nodes());
 				print("Call to function 'nodes'")
 				for k, v in pairs(msg) do
@@ -43,21 +43,21 @@ local lunced_method = {
 			function(req)
 				conn:reply(req, lunced_bmx6_local());
 				print("Call to function 'self'")
-			end, {id = ubus.INT32, msg = ubus.STRING }			
+			end, {id = ubus.INT32, msg = ubus.STRING }
 		},
 		version = {
 			function(req)
 
 				conn:reply(req, lunced_local_version() );
 				print("Call to function 'version'")
-			end, {id = ubus.INT32, msg = ubus.STRING }			
+			end, {id = ubus.INT32, msg = ubus.STRING }
 		},
 		reply = {
 			function(req, msg)
 				print("Call to function 'reply'")
 				for k, v in pairs(msg) do
 					print("key=" .. k .. " value=" .. tostring(v))
-				end			
+				end
 			end, {id = ubus.INT32, msg = ubus.STRING }
 		}
 
@@ -66,8 +66,8 @@ local lunced_method = {
 
 conn:add(lunced_method)
 
-local lucend_event = {
-	lucend = function(msg)
+local lunced_event = {
+	lunced = function(msg)
 		print("Call to lucent event")
 		for k, v in pairs(msg) do
 			print("key=" .. k .. " value=" .. tostring(v))
@@ -75,6 +75,6 @@ local lucend_event = {
 	end,
 }
 
-conn:listen(lucend_event)
+conn:listen(lunced_event)
 
 uloop.run()
