@@ -2,10 +2,11 @@
 
 require "ubus"
 require "uloop"
-JSON = (loadfile "JSON.lua")()
-require "lunced_tools"
-require "lunced_local"
-require "lunced_bmx"
+require "lunced.tools"
+require "lunced.local"
+require "lunced.bmx"
+JSON = (loadfile "/usr/share/lunced/JSON.lua")()
+
 
 local selfInfo = {}
 

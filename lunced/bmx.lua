@@ -36,18 +36,21 @@ function lunced_bmx6_neighbours(sI)
 	list_nodes['nodes'] = {}
 	ret_nodes['nodes'] = {}
 
-	for i,v in ipairs(links.links) do
-		for o,b in ipairs(nodes.originators) do
-			if v.name == b.name then
-				list_nodes['nodes'][b.name] = ipp2uuid(b.primaryIp)
+	if links ~= nil then
+		for i,v in ipairs(links.links) do
+			for o,b in ipairs(nodes.originators) do
+				if v.name == b.name then
+					list_nodes['nodes'][b.name] = ipp2uuid(b.primaryIp)
+				end
 			end
 		end
+		counter = 1
+		for i,v in pairs(list_nodes.nodes) do
+			ret_nodes['nodes'][counter] = v
+			counter = counter + 1
+		end
 	end
-	counter = 1
-	for i,v in pairs(list_nodes.nodes) do
-		ret_nodes['nodes'][counter] = v
-		counter = counter + 1
-	end
+	list_nodes = nil
 	links = nil
 	nodes = nil
 	return( ret_nodes ) 
