@@ -12,6 +12,7 @@ local selfInfo = {}
 uloop.init()
 
 local timeout = 10
+local tries = 2
 local conn = ubus.connect()
 if not conn then
 	error("Failed to connect to ubus")
@@ -23,31 +24,31 @@ local lunced_method = {
 			function(req, msg)
 				-- get nodes
 				conn:reply(req, lunced_bmx6_nodes(selfInfo));
-				print("Call to function 'nodes'")
+				debugMsg("Call to function 'nodes'")
 			end, { nodes = ubus.STRING }
 		},
 		neighbours = {
 			function(req)
 				conn:reply(req, lunced_bmx6_neighbours(selfInfo));
-				print("Call to function 'neighbours'")
+				debugMsg("Call to function 'neighbours'")
 			end, { nodes = ubus.STRING }
 		},
 		self = {
 			function(req)
 				conn:reply(req, lunced_bmx6_local(selfInfo));
-				print("Call to function 'self'")
+				debugMsg("Call to function 'self'")
 			end, {id = ubus.STRING, name = ubus.STRING }
 		},
 		version = {
 			function(req)
 				conn:reply(req, lunced_local_version(selfInfo) );
-				print("Call to function 'version'")
+				debugMsg("Call to function 'version'")
 			end, { version = ubus.STRING }
 		},
 		reply = {
 			function(req, msg)
 				local datos = ""
-				print("Call to function 'reply'")
+				debugMsg("Call to function 'reply'")
 				url = ""
 				cmd = ""
 				for k,v in pairs(msg) do
@@ -72,9 +73,11 @@ local lunced_method = {
 						datos = lunced_local_version(selfInfo)
 					end
 				else
-					local comando = "/usr/bin/wget -T ".. timeout .." -O - http://[" .. tostring(toIP) .. "]/cgi-bin/lunced?cmd=" .. tostring(cmd)
+					local comando = "/usr/bin/wget -T ".. timeout .." -t " .. tries .. " -qO - http://[" .. tostring(toIP) .. "]/cgi-bin/lunced?cmd=" .. tostring(cmd)
 					local datosString = run(comando)
-					print (datosString)
+					if datosString == "" then
+						datosString = errorCode(100)
+					end
 					datos = JSON:decode(datosString)
 				end
 				if datos ~= "" then
