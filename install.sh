@@ -3,7 +3,7 @@
 INSTALLDIR="/usr/share/lunced"
 LUALIB="//usr/lib/lua/lunced"
 CGIDIR="/www/cgi-bin"
-INITDIR"/etc/init.d"
+INITDIR="/etc/init.d"
 
 mkdir -p $INSTALLDIR
 cp *.lua $INSTALLDIR/
