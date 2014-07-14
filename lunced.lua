@@ -6,7 +6,21 @@ require "lunced.tools"
 require "lunced.local"
 require "lunced.bmx"
 JSON = (loadfile "/usr/share/lunced/JSON.lua")()
+RUNDIR = "/var/run/lunced"
+PIDFILE = "pid"
+STATFILE = "/proc/self/stat"
 
+local fstat = assert(io.open(STATFILE, "r"))
+local pid = fstat:read("*number")
+fstat:close()
+
+os.execute("mkdir -p " .. RUNDIR)
+                                                  
+local fpid = assert(io.open( RUNDIR .. "/" .. PIDFILE, "w+"))
+io.output(fpid)                                              
+io.write(pid)  
+io.write("\n")
+fpid:close() 
 
 local selfInfo = {}
 
