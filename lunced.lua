@@ -15,12 +15,12 @@ local pid = fstat:read("*number")
 fstat:close()
 
 os.execute("mkdir -p " .. RUNDIR)
-                                                  
+
 local fpid = assert(io.open( RUNDIR .. "/" .. PIDFILE, "w+"))
-io.output(fpid)                                              
-io.write(pid)  
+io.output(fpid)
+io.write(pid)
 io.write("\n")
-fpid:close() 
+fpid:close()
 
 local selfInfo = {}
 
@@ -62,41 +62,48 @@ local lunced_method = {
 		},
 		reply = {
 			function(req, msg)
-				local datos = ""
+				local data = ""
 				debugMsg("Call to function 'reply'")
 				url = ""
 				cmd = ""
 				for k,v in pairs(msg) do
-					if tostring(k) == "id" then 
-						toIP = uuid2ipp(tostring(v))
+					if tostring(k) == "id" then
+						toIP = uuid2ipv6(tostring(v))
 					end
 					if tostring(k) == "cmd" then
 						cmd = tostring(v)
 					end
 				end
+
 				if selfInfo.id == nil then
 					 lunced_bmx6_getSelfInfo(selfInfo)
 				end
-				if toIP == uuid2ipp(selfInfo.id) then
+
+				if toIP == uuid2ipv6(selfInfo.id) then
 					if cmd == "listnodes" then
-						datos = lunced_bmx6_nodes(selfInfo)
+						data = lunced_bmx6_nodes(selfInfo)
 					elseif cmd == "neighbours" then
-						datos = lunced_bmx6_neighbours(selfInfo)
+						data = lunced_bmx6_neighbours(selfInfo)
 					elseif cmd == "self" then
-						datos = lunced_bmx6_local(selfInfo)
+						data = lunced_bmx6_local(selfInfo)
 					elseif cmd == "version" then
-						datos = lunced_local_version(selfInfo)
+						data = lunced_local_version(selfInfo)
 					end
+
+				elseif node_in_nodes(ipv62uuid(toIP), lunced_bmx6_nodes(selfInfo).nodes) then
+					local command = "/usr/bin/wget -T ".. timeout .." -t " .. tries .. " -qO - http://[" .. tostring(toIP) .. "]/cgi-bin/lunced?cmd=" .. tostring(cmd)
+					local dataString = run(command)
+					if dataString == "" then
+						dataString = errorCode(100)
+					end
+					data = JSON:decode(dataString)
+
 				else
-					local comando = "/usr/bin/wget -T ".. timeout .." -t " .. tries .. " -qO - http://[" .. tostring(toIP) .. "]/cgi-bin/lunced?cmd=" .. tostring(cmd)
-					local datosString = run(comando)
-					if datosString == "" then
-						datosString = errorCode(100)
-					end
-					datos = JSON:decode(datosString)
+					data = JSON:decode(errorCode(101))
 				end
-				if datos ~= "" then
-					conn:reply(req, datos )
+
+				if data ~= "" then
+					conn:reply(req, data )
 				end
 			end, { cmd = ubus.STRING }
 		}
@@ -108,7 +115,7 @@ conn:add(lunced_method)
 
 local lunced_event = {
 	lunced = function(msg)
-		print("Call to lucent event")
+		print("Call to lunced event")
 		for k, v in pairs(msg) do
 			print("key=" .. k .. " value=" .. tostring(v))
 		end
