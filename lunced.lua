@@ -54,6 +54,18 @@ local lunced_method = {
 				debugMsg("Call to function 'self'")
 			end, {id = ubus.STRING, name = ubus.STRING }
 		},
+		systemBoard = {
+			function(req)
+				conn:reply(req, conn:call("system", "board", {}));
+				debugMsg("Call to function 'systemBoard'")
+			end, {systemBoard = ubus.STRING}
+		},
+		systemInfo = {
+			function(req)
+				conn:reply(req, conn:call("system", "info", {}));
+				debugMsg("Call to function 'systemInfo'")
+			end, {systemBoard = ubus.STRING}
+		},
 		version = {
 			function(req)
 				conn:reply(req, lunced_local_version(selfInfo) );
