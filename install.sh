@@ -1,7 +1,7 @@
 #!/bin/sh
 
 INSTALLDIR="/usr/share/lunced"
-LUALIB="//usr/lib/lua/lunced"
+LUALIB="/usr/lib/lua/lunced"
 CGIDIR="/www/cgi-bin"
 INITDIR="/etc/init.d"
 
