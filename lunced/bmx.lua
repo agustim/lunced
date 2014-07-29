@@ -16,6 +16,40 @@ end
 --	return(string.gsub(ipv6,"",""))
 -- end
 
+function lunced_bmx6_flushAll()
+	run('bmx6 -c --flushAll')
+end
+
+function lunced_bmx6_interfaces()
+	local interfaces = JSON:decode(run('bmx6 -c --jshow interfaces'))
+	return( interfaces )
+end
+
+function lunced_bmx6_links()
+	local links = JSON:decode(run('bmx6 -c --jshow links'))
+	return( links )
+end
+
+function lunced_bmx6_originators()
+	local originators = JSON:decode(run('bmx6 -c --jshow originators'))
+	return( originators )
+end
+
+--[[function lunced_bmx6_parameters()
+	local parameters = JSON:decode(run('bmx6 -c --parameters'))
+	return( parameters )
+end--]]
+
+function lunced_bmx6_status()
+	local status = JSON:decode(run('bmx6 -c --jshow status'))
+	return( status )
+end
+
+--[[function lunced_bmx6_version()
+	local version = JSON:decode(run('bmx6 -c --version'))
+	return( parameters )
+end--]]
+
 function lunced_bmx6_nodes(sI)
 	local nodes = JSON:decode(run('bmx6 -c --jshow originators'))
 	local ret_nodes = {}
