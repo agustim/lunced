@@ -16,9 +16,10 @@ end
 --	return(string.gsub(ipv6,"",""))
 -- end
 
-function lunced_bmx6_flushAll()
-	run('bmx6 -c --flushAll')
-end
+--[[function lunced_bmx6_flushAll()
+	local flushAll = os.execute('bmx6 -c --flushAll')
+	return( flushAll )
+end--]]
 
 function lunced_bmx6_interfaces()
 	local interfaces = JSON:decode(run('bmx6 -c --jshow interfaces'))

@@ -35,12 +35,12 @@ end
 
 local lunced_method = {
 	lunced = {
-		bmx6FlushAll = {
+		--[[bmx6FlushAll = {
 			function(req)
 				conn:reply(req, lunced_bmx6_flushAll());
 				debugMsg("Call to function 'bmx6FlushAll'")
 			end, { }
-		},
+		},--]]
 		bmx6Interfaces = {
 			function(req)
 				conn:reply(req, lunced_bmx6_interfaces());
@@ -134,7 +134,21 @@ local lunced_method = {
 				end
 
 				if toIP == uuid2ipv6(selfInfo.id) then
-					if cmd == "listnodes" then
+					if cmd =="bmx6FlushAll" then
+						data = lunced_bmx6_flushAll(selfInfo)
+					elseif cmd =="bmx6Interfaces" then
+						data = lunced_bmx6_interfaces(selfInfo)
+					elseif cmd =="bmx6Links" then
+						data = lunced_bmx6_links(selfInfo)
+					elseif cmd =="bmx6Originators" then
+						data = lunced_bmx6_originators(selfInfo)
+					elseif cmd =="bmx6Parameters" then
+						data = lunced_bmx6_parameters(selfInfo)
+					elseif cmd =="bmx6Version" then
+						data = lunced_bmx6_version(selfInfo)
+					elseif cmd =="bmx6Status" then
+						data = lunced_bmx6_status(selfInfo)
+					elseif cmd == "listnodes" then
 						data = lunced_bmx6_nodes(selfInfo)
 					elseif cmd == "neighbours" then
 						data = lunced_bmx6_neighbours(selfInfo)
