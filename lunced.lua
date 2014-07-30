@@ -35,6 +35,48 @@ end
 
 local lunced_method = {
 	lunced = {
+		--[[bmx6FlushAll = {
+			function(req)
+				conn:reply(req, lunced_bmx6_flushAll());
+				debugMsg("Call to function 'bmx6FlushAll'")
+			end, { }
+		},--]]
+		bmx6Interfaces = {
+			function(req)
+				conn:reply(req, lunced_bmx6_interfaces());
+				debugMsg("Call to function 'bmx6Interfaces'")
+			end, { }
+		},
+		bmx6Links = {
+			function(req)
+				conn:reply(req, lunced_bmx6_links());
+				debugMsg("Call to function 'bmx6Links'")
+			end, { }
+		},
+		bmx6Originators = {
+			function(req)
+				conn:reply(req, lunced_bmx6_originators());
+				debugMsg("Call to function 'bmx6Originators'")
+			end, { }
+		},
+		--[[bmx6Parameters = {
+			function(req)
+				conn:reply(req, lunced_bmx6_originators());
+				debugMsg("Call to function 'bmx6Originators'")
+			end, { }
+		},--]]
+		--[[bmx6Version = {
+			function(req)
+				conn:reply(req, lunced_bmx6_version());
+				debugMsg("Call to function 'bmx6Version'")
+			end, { }
+		},--]]
+		bmx6Status = {
+			function(req)
+				conn:reply(req, lunced_bmx6_status());
+				debugMsg("Call to function 'bmx6Status'")
+			end, { }
+		},
 		listnodes = {
 			function(req, msg)
 				-- get nodes
@@ -58,13 +100,13 @@ local lunced_method = {
 			function(req)
 				conn:reply(req, conn:call("system", "board", {}));
 				debugMsg("Call to function 'systemBoard'")
-			end, {systemBoard = ubus.STRING}
+			end, { }
 		},
 		systemInfo = {
 			function(req)
 				conn:reply(req, conn:call("system", "info", {}));
 				debugMsg("Call to function 'systemInfo'")
-			end, {systemBoard = ubus.STRING}
+			end, { }
 		},
 		version = {
 			function(req)
@@ -92,7 +134,21 @@ local lunced_method = {
 				end
 
 				if toIP == uuid2ipv6(selfInfo.id) then
-					if cmd == "listnodes" then
+					if cmd =="bmx6FlushAll" then
+						data = lunced_bmx6_flushAll(selfInfo)
+					elseif cmd =="bmx6Interfaces" then
+						data = lunced_bmx6_interfaces(selfInfo)
+					elseif cmd =="bmx6Links" then
+						data = lunced_bmx6_links(selfInfo)
+					elseif cmd =="bmx6Originators" then
+						data = lunced_bmx6_originators(selfInfo)
+					elseif cmd =="bmx6Parameters" then
+						data = lunced_bmx6_parameters(selfInfo)
+					elseif cmd =="bmx6Version" then
+						data = lunced_bmx6_version(selfInfo)
+					elseif cmd =="bmx6Status" then
+						data = lunced_bmx6_status(selfInfo)
+					elseif cmd == "listnodes" then
 						data = lunced_bmx6_nodes(selfInfo)
 					elseif cmd == "neighbours" then
 						data = lunced_bmx6_neighbours(selfInfo)
